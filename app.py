@@ -68,9 +68,17 @@ async def process_callback_query(callback_query: types.CallbackQuery) -> None:
     description = ''
     
     if action == "1":
-        description = 'Подписка на бота 📑'
+        description = 'Подписка на бота (1 месяц) 📑'
         prices = [LabeledPrice(label="Оплата заказа №1", amount=100 * 100)]
+    
+    if action == "2":
+        description = "Подписка на бота (3 месяца) 📑"
+        prices = [LabeledPrice(label="Оплата заказа №2", amount=300*100)]
 
+    if action == "3":
+        description = "Подписка на бота (1 год) 📑"
+        prices = [LabeledPrice(label="Оплата заказа №3", amount=1200*100)]
+    
     if prices:
         logging.info(f"Отправка инвойса с валютой: {CURRENCY}")
         await bot.send_invoice(
