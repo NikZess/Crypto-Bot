@@ -4,6 +4,7 @@ from kbds.inline import (
     get_user_main_btns, 
     get_user_settings_btns,
     get_user_about_btns,
+    get_user_prices_btns,
 )
 
 from common.text_for_db import description_for_info_pages
@@ -11,6 +12,12 @@ from common.text_for_db import description_for_info_pages
 async def main_menu(session: AsyncSession, level: int, menu_name: str):
     description = description_for_info_pages["main_menu"]
     kbds = get_user_main_btns(level=level)
+    
+    return description, kbds
+
+async def prices_menu(session: AsyncSession, level: int, menu_name: str):
+    description = description_for_info_pages["prices_menu"]
+    kbds = get_user_prices_btns(level=level)
     
     return description, kbds
 
@@ -35,6 +42,9 @@ async def get_menu_content(
 ):
     if level == 0:
         return await main_menu(session, level, menu_name)
+    
+    if level == 1:
+        return await prices_menu(session, level, menu_name)
     
     if level == 2:
         return await about_menu(session, level, menu_name)

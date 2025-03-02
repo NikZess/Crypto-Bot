@@ -5,7 +5,7 @@ venv/
 *.pyo
 *.pyd
 *.db
-*.db-journal
+my_base.db-journal
 
 *.log
 *.sqlite3

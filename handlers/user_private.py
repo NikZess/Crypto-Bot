@@ -16,7 +16,6 @@ from sqlalchemy import select
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-
 user_private_router = Router()
 user_private_router.message.filter(ChatTypeFilter(["private"]))
 

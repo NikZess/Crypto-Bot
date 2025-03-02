@@ -14,7 +14,7 @@ def get_purchase_keyboard() -> InlineKeyboardMarkup:
         [InlineKeyboardButton(text="1 год 💰", callback_data="buy_3")],
     ])
     
-def get_user_main_btns(*, level: int, sizes: tuple[int] = (2,)):
+def get_user_main_btns(*, level: int, sizes: tuple[int] = (2,)) -> InlineKeyboardMarkup:
     keyboard = InlineKeyboardBuilder()
     
     btns = {
@@ -25,7 +25,7 @@ def get_user_main_btns(*, level: int, sizes: tuple[int] = (2,)):
     for text, menu_name in btns.items():
         if menu_name == "prices":
             keyboard.add(InlineKeyboardButton(text=text, 
-                    callback_data=MenuCallBack(level=level+1, menu_name=menu_name).pack()))
+                    callback_data=MenuCallBack(level=1, menu_name=menu_name).pack()))
             
         elif menu_name == "about":
             keyboard.add(InlineKeyboardButton(text=text,
@@ -35,6 +35,28 @@ def get_user_main_btns(*, level: int, sizes: tuple[int] = (2,)):
             keyboard.add(InlineKeyboardButton(text=text,
                     callback_data=MenuCallBack(level=3, menu_name=menu_name).pack()))
         
+    return keyboard.adjust(*sizes).as_markup()
+
+def get_user_prices_btns(*, level: int, sizes: tuple[int] = (1,)) -> InlineKeyboardMarkup:
+    keyboard = InlineKeyboardBuilder()
+    
+    btns = {
+        "Назад 🔙": "back_menu_from_prices",
+        "BTC": "btc_usdt",
+        "TON": "ton_usdt",
+    }
+    
+    for text, menu_name in btns.items():
+        if menu_name == "back_menu_from_prices":
+            keyboard.add(InlineKeyboardButton(
+                text=text,
+                callback_data=MenuCallBack(level=0, menu_name="main").pack()
+            ))
+        elif menu_name in ["btc_usdt", "ton_usdt"]:
+            keyboard.add(InlineKeyboardButton(
+                text=text,
+                callback_data=MenuCallBack(level=level, menu_name=menu_name).pack()
+            ))
     return keyboard.adjust(*sizes).as_markup()
 
 def get_user_about_btns(*, level: int, sizes: tuple[int] = (1,)):
