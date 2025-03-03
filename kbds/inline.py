@@ -42,8 +42,8 @@ def get_user_prices_btns(*, level: int, sizes: tuple[int] = (1,)) -> InlineKeybo
     
     btns = {
         "Назад 🔙": "back_menu_from_prices",
-        "BTC": "btc_usdt",
-        "TON": "ton_usdt",
+        "BTC": "usdt_btc",
+        "TON": "usdt_ton",
     }
     
     for text, menu_name in btns.items():
@@ -52,14 +52,14 @@ def get_user_prices_btns(*, level: int, sizes: tuple[int] = (1,)) -> InlineKeybo
                 text=text,
                 callback_data=MenuCallBack(level=0, menu_name="main").pack()
             ))
-        elif menu_name in ["btc_usdt", "ton_usdt"]:
+        elif menu_name in ["usdt_btc", "usdt_ton"]:
             keyboard.add(InlineKeyboardButton(
                 text=text,
                 callback_data=MenuCallBack(level=level, menu_name=menu_name).pack()
             ))
     return keyboard.adjust(*sizes).as_markup()
 
-def get_user_about_btns(*, level: int, sizes: tuple[int] = (1,)):
+def get_user_about_btns(*, level: int, sizes: tuple[int] = (1,)) -> InlineKeyboardMarkup:
     keyboard = InlineKeyboardBuilder()
     
     btns = {
@@ -103,3 +103,4 @@ def get_user_settings_btns(*, level: int, sizes: tuple[int] = (1,)) -> InlineKey
             ))
 
     return keyboard.adjust(*sizes).as_markup()
+
