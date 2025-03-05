@@ -2,7 +2,7 @@ from aiogram import Router, types, F, Bot
 from aiogram.filters import CommandStart, Command, or_f
 
 
-from kbds.inline import MenuCallBack
+from kbds.inline import MenuCallBack, get_user_prices_btns, get_user_prices_price_btns
 from utils.parsing_crypto import get_price
 
 from filters.chat_type import ChatTypeFilter
@@ -33,6 +33,44 @@ async def user_menu(callback: types.CallbackQuery, callback_data: MenuCallBack, 
         menu_name=callback_data.menu_name
     )
     await callback.message.edit_text(description, reply_markup=reply_markup)
+    await callback.answer()
+    
+@user_private_router.callback_query(F.data.startswith("prices"))
+async def show_prices_menu(callback: types.CallbackQuery, session: AsyncSession):
+    """Обработчик кнопки 'Курсы криптовалют 🪙'"""
+    reply_markup = get_user_prices_btns(level=2)
+    
+    await callback.message.edit_text("Выберите криптовалюту:", reply_markup=reply_markup)
+    await callback.answer()
+
+@user_private_router.callback_query(F.data.startswith("usdt_btc"))
+async def show_btc_price(callback: types.CallbackQuery, session: AsyncSession):
+    """Обработчик кнопки 'BTCUSDT'"""
+    # Здесь должен быть запрос к API Binance для получения цены BTC/USDT
+    btc_price = get_price("BTCUSDT")
+
+    reply_markup = get_user_prices_price_btns(level=3)
+    
+    await callback.message.edit_text(f"{btc_price}\n\nНажмите 'Назад' для возврата.", reply_markup=reply_markup)
+    await callback.answer()
+
+@user_private_router.callback_query(F.data.startswith("usdt_ton"))
+async def show_ton_price(callback: types.CallbackQuery, session: AsyncSession):
+    """Обработчик кнопки 'TONUSDT'"""
+    # Здесь должен быть запрос к API Binance для получения цены TON/USDT
+    ton_price = get_price("TONUSDT")  # Заглушка
+
+    reply_markup = get_user_prices_price_btns(level=3)
+    
+    await callback.message.edit_text(f"{ton_price}\n\nНажмите 'Назад' для возврата.", reply_markup=reply_markup)
+    await callback.answer()
+
+@user_private_router.callback_query(F.data.startswith("back_to_prices"))
+async def back_to_prices_menu(callback: types.CallbackQuery, session: AsyncSession):
+    """Обработчик кнопки 'Назад 🔙' в меню цен"""
+    reply_markup = get_user_prices_btns(level=2)
+    
+    await callback.message.edit_text("Выберите криптовалюту:", reply_markup=reply_markup)
     await callback.answer()
 
 @user_private_router.message(Command("crypto"))

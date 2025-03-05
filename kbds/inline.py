@@ -59,6 +59,22 @@ def get_user_prices_btns(*, level: int, sizes: tuple[int] = (1,)) -> InlineKeybo
             ))
     return keyboard.adjust(*sizes).as_markup()
 
+def get_user_prices_price_btns(*, level: int = 2, sizes: tuple[int] = (1,)) -> InlineKeyboardMarkup:
+    keyboard = InlineKeyboardBuilder()
+    
+    btns = {
+        "Назад 🔙": "back_to_prices",
+    }
+    
+    for text, menu_name in btns.items():
+        if menu_name == "back_to_prices":
+            keyboard.add(InlineKeyboardButton(
+                text=text,
+                callback_data=MenuCallBack(level=level - 1, menu_name="prices").pack()  # ✅ Возвращает в меню с BTC и TON
+            ))
+    
+    return keyboard.adjust(*sizes).as_markup()
+
 def get_user_about_btns(*, level: int, sizes: tuple[int] = (1,)) -> InlineKeyboardMarkup:
     keyboard = InlineKeyboardBuilder()
     
