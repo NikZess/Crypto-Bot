@@ -5,7 +5,6 @@ from kbds.inline import (
     get_user_settings_btns,
     get_user_about_btns,
     get_user_prices_btns,
-    get_user_prices_price_btns
 )
 
 from utils.parsing_crypto import get_price
@@ -21,14 +20,6 @@ async def main_menu(session: AsyncSession, level: int, menu_name: str):
 async def prices_menu(session: AsyncSession, level: int, menu_name: str):
     description = description_for_info_pages["prices_menu"]
     kbds = get_user_prices_btns(level=level)
-    
-    return description, kbds
-
-async def price_usdt_menu(session: AsyncSession, level: int, menu_name: str):
-    price = get_price("BTCUSDT")
-    
-    description = f"Цена BTC = {price}"
-    kbds = get_user_prices_price_btns(level=level)
     
     return description, kbds
 

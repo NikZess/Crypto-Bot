@@ -1,0 +1,3 @@
+Было принято решение сделать функцию по парсингу цен не через inline меню, а через отдельную команду. В inline меню будет просто информация об использовании этой функции, список доступных валют, информация о настройке бирж.
+
+It was decided to make a price parsing function not through an inline menu, but through a separate command. The inline menu will simply contain information about using this function, a list of available currencies, and information about setting up exchanges.

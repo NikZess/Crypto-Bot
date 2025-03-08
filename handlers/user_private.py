@@ -2,12 +2,13 @@ from aiogram import Router, types, F, Bot
 from aiogram.filters import CommandStart, Command, or_f
 
 
-from kbds.inline import MenuCallBack, get_user_prices_btns, get_user_prices_price_btns
+from kbds.inline import MenuCallBack, get_user_prices_btns
 from utils.parsing_crypto import get_price
 
 from filters.chat_type import ChatTypeFilter
 
 from kbds.reply import get_keyboard, del_kb
+from kbds.inline import get_prices_keyboard
 
 from handlers.menu_processing import get_menu_content
 
@@ -35,44 +36,6 @@ async def user_menu(callback: types.CallbackQuery, callback_data: MenuCallBack, 
     await callback.message.edit_text(description, reply_markup=reply_markup)
     await callback.answer()
     
-@user_private_router.callback_query(F.data.startswith("prices"))
-async def show_prices_menu(callback: types.CallbackQuery, session: AsyncSession):
-    """Обработчик кнопки 'Курсы криптовалют 🪙'"""
-    reply_markup = get_user_prices_btns(level=2)
-    
-    await callback.message.edit_text("Выберите криптовалюту:", reply_markup=reply_markup)
-    await callback.answer()
-
-@user_private_router.callback_query(F.data.startswith("usdt_btc"))
-async def show_btc_price(callback: types.CallbackQuery, session: AsyncSession):
-    """Обработчик кнопки 'BTCUSDT'"""
-    # Здесь должен быть запрос к API Binance для получения цены BTC/USDT
-    btc_price = get_price("BTCUSDT")
-
-    reply_markup = get_user_prices_price_btns(level=3)
-    
-    await callback.message.edit_text(f"{btc_price}\n\nНажмите 'Назад' для возврата.", reply_markup=reply_markup)
-    await callback.answer()
-
-@user_private_router.callback_query(F.data.startswith("usdt_ton"))
-async def show_ton_price(callback: types.CallbackQuery, session: AsyncSession):
-    """Обработчик кнопки 'TONUSDT'"""
-    # Здесь должен быть запрос к API Binance для получения цены TON/USDT
-    ton_price = get_price("TONUSDT")  # Заглушка
-
-    reply_markup = get_user_prices_price_btns(level=3)
-    
-    await callback.message.edit_text(f"{ton_price}\n\nНажмите 'Назад' для возврата.", reply_markup=reply_markup)
-    await callback.answer()
-
-@user_private_router.callback_query(F.data.startswith("back_to_prices"))
-async def back_to_prices_menu(callback: types.CallbackQuery, session: AsyncSession):
-    """Обработчик кнопки 'Назад 🔙' в меню цен"""
-    reply_markup = get_user_prices_btns(level=2)
-    
-    await callback.message.edit_text("Выберите криптовалюту:", reply_markup=reply_markup)
-    await callback.answer()
-
 @user_private_router.message(Command("crypto"))
 async def crypto_cmd_handler(message: types.Message, session: AsyncSession):
     user_id = message.from_user.id
@@ -85,33 +48,21 @@ async def crypto_cmd_handler(message: types.Message, session: AsyncSession):
         await message.reply("Чтобы пользоваться услугами бота 🤖 \nОплатите подписку 💸 /subscribe")
     else:
         await message.answer(
-            "Выберите валюту",
-            reply_markup=get_keyboard(
-                "/BTCUSDT",
-                "/TONUSDT",
-                placeholder="Выберите валюту",
-                sizes=(1,)
-            )
+            text="<strong>Доступные валюты</strong>",
+            reply_markup=get_prices_keyboard()
         )
         
-@user_private_router.message(Command("BTCUSDT"))
-async def get_price_btc_handler(message: types.Message):
-    price = get_price("BTCUSDT")
+@user_private_router.callback_query(F.data.startswith("usdt"))
+async def get_price_usdt(callback_query: types.CallbackQuery) -> None:
+    data = callback_query.data
+    result = data.split("_")[1]
+    print(result)
     
-    if price is not None:
-        await message.answer(f"Цена BTC: {price} USDT", reply_markup=del_kb)
-    else:
-        await message.answer("Не удалось получить цену.")
+    if result == "btc":
+        price_crypto = get_price("BTCUSDT")
+        await callback_query.message.answer(f"Цена BTC: {price_crypto}")
+          
+    if result == "ton":
+        price_crypto = get_price("TONUSDT")
+        await callback_query.message.answer(f"Цена TON: {price_crypto}")
 
-@user_private_router.message(Command("TONUSDT"))
-async def get_price_btc_handler(message: types.Message):
-    price = get_price("TONUSDT")
-    
-    if price is not None:
-        await message.answer(f"Цена TON: {price} USDT", reply_markup=del_kb)
-    else:
-        await message.answer("Не удалось получить цену.")
-        
-
-
-        
