@@ -52,7 +52,7 @@ if not PROVIDER_TOKEN:
 if not CURRENCY:
     raise ValueError("BOT_CURRENCY не найдено")
 
-@dp.message(or_f(Command('subscribe'), F.data.startswith('buy_subscribe')))
+@dp.message(Command('subscribe'))
 async def command_start_handler(message: Message) -> None:
     await message.answer(
         text="Хотите оплатить подписку❓",
@@ -61,11 +61,11 @@ async def command_start_handler(message: Message) -> None:
 
 @dp.callback_query(F.data.startswith("buy"))
 async def process_callback_query(callback_query: types.CallbackQuery) -> None:
-    data = callback_query.data  # Получаем данные из callback
-    parts = data.split('_')  # Разбиваем строку
+    data = callback_query.data  
+    parts = data.split('_')  
 
 
-    action = parts[1]  # Извлекаем действие
+    action = parts[1]
     print(action)
     
     prices = []
@@ -110,7 +110,7 @@ async def process_successful_payment(message: Message, session: AsyncSession) ->
     sub_user_id = message.from_user.id
     list_vip_users.append(sub_user_id)
 
-    user = message.from_user  # Используем message.from_user вместо callback.from_user
+    user = message.from_user
     try:
         await orm_add_user(
             session,
