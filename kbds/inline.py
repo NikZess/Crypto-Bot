@@ -27,7 +27,6 @@ def get_user_main_btns(*, level: int, sizes: tuple[int] = (2, 1, 1)) -> InlineKe
         "Курсы криптовалют 🪙": "prices",
         "О нас ℹ️": "about",
         "Настройки ⚙️": "settings",
-        "Подписка 💸": "buy_subscribe"
     }
     
     for text, menu_name in btns.items():
@@ -47,12 +46,6 @@ def get_user_main_btns(*, level: int, sizes: tuple[int] = (2, 1, 1)) -> InlineKe
             keyboard.add(InlineKeyboardButton(
                     text=text,
                     callback_data=MenuCallBack(level=3, menu_name=menu_name).pack()
-                ))
-        
-        elif menu_name == "buy_subscribe":
-            keyboard.add(InlineKeyboardButton(
-                    text=text,
-                    callback_data=MenuCallBack(level=level, menu_name=menu_name).pack()
                 ))
         
     return keyboard.adjust(*sizes).as_markup()

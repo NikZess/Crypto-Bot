@@ -3,15 +3,9 @@ import os
 from aiogram import Router, types, F, Bot
 from aiogram.filters import CommandStart, Command, or_f
 
-from database.orm_query import orm_add_user
-from kbds.inline import MenuCallBack, get_user_prices_btns
-from utils.parsing_crypto import get_price
+from kbds.inline import MenuCallBack
 
-from aiogram.types import (
-    LabeledPrice, 
-    PreCheckoutQuery, 
-    Message
-)
+from APIparsers.parsing_crypto import get_price
 
 from filters.chat_type import ChatTypeFilter
 
@@ -27,15 +21,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 user_private_router = Router()
 user_private_router.message.filter(ChatTypeFilter(["private"]))
-
-PROVIDER_TOKEN = os.getenv("PROVIDER_TOKEN")
-CURRENCY = os.getenv("BOT_CURRENCY")
-
-if not PROVIDER_TOKEN:
-    raise ValueError("BOT_CURRENCY не найдено")
-
-if not CURRENCY:
-    raise ValueError("BOT_CURRENCY не найдено")
 
 @user_private_router.message(CommandStart())
 async def start_cmd_handler(message: types.Message, session: AsyncSession):
@@ -59,7 +44,7 @@ async def crypto_cmd_handler(message: types.Message, session: AsyncSession):
     
     query = select(User).where(User.user_id == user_id)
     result = await session.execute(query)
-    user = result.scalar_one_or_none()  # Возвращает None, если пользователя нет
+    user = result.scalar_one_or_none()  
 
     if user is None:
         await message.reply("Чтобы пользоваться услугами бота 🤖 \nОплатите подписку 💸 /subscribe")
