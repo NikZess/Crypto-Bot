@@ -20,26 +20,40 @@ def get_prices_keyboard() -> InlineKeyboardMarkup:
         [InlineKeyboardButton(text="TON", callback_data="usdt_ton")]
     ])
     
-def get_user_main_btns(*, level: int, sizes: tuple[int] = (2,)) -> InlineKeyboardMarkup:
+def get_user_main_btns(*, level: int, sizes: tuple[int] = (2, 1, 1)) -> InlineKeyboardMarkup:
     keyboard = InlineKeyboardBuilder()
     
     btns = {
         "Курсы криптовалют 🪙": "prices",
         "О нас ℹ️": "about",
         "Настройки ⚙️": "settings",
+        "Подписка 💸": "buy_subscribe"
     }
+    
     for text, menu_name in btns.items():
         if menu_name == "prices":
-            keyboard.add(InlineKeyboardButton(text=text, 
-                    callback_data=MenuCallBack(level=1, menu_name=menu_name).pack()))
+            keyboard.add(InlineKeyboardButton(
+                    text=text, 
+                    callback_data=MenuCallBack(level=1, menu_name=menu_name).pack()
+                ))
             
         elif menu_name == "about":
-            keyboard.add(InlineKeyboardButton(text=text,
-                    callback_data=MenuCallBack(level=2, menu_name=menu_name).pack()))
+            keyboard.add(InlineKeyboardButton(
+                    text=text,
+                    callback_data=MenuCallBack(level=2, menu_name=menu_name).pack()
+                ))
             
         elif menu_name == "settings":
-            keyboard.add(InlineKeyboardButton(text=text,
-                    callback_data=MenuCallBack(level=3, menu_name=menu_name).pack()))
+            keyboard.add(InlineKeyboardButton(
+                    text=text,
+                    callback_data=MenuCallBack(level=3, menu_name=menu_name).pack()
+                ))
+        
+        elif menu_name == "buy_subscribe":
+            keyboard.add(InlineKeyboardButton(
+                    text=text,
+                    callback_data=MenuCallBack(level=level, menu_name=menu_name).pack()
+                ))
         
     return keyboard.adjust(*sizes).as_markup()
 
@@ -109,4 +123,3 @@ def get_user_settings_btns(*, level: int, sizes: tuple[int] = (1,)) -> InlineKey
             ))
 
     return keyboard.adjust(*sizes).as_markup()
-

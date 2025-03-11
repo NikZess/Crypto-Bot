@@ -7,8 +7,6 @@ from kbds.inline import (
     get_user_prices_btns,
 )
 
-from utils.parsing_crypto import get_price
-
 from common.text_for_db import description_for_info_pages
 
 async def main_menu(session: AsyncSession, level: int, menu_name: str):

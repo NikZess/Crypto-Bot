@@ -9,7 +9,7 @@ from aiogram import (
     F
 )
 
-from aiogram.filters import Command
+from aiogram.filters import Command, or_f
 from aiogram.enums.parse_mode import ParseMode
 from aiogram.client.default import DefaultBotProperties
 
@@ -52,7 +52,7 @@ if not PROVIDER_TOKEN:
 if not CURRENCY:
     raise ValueError("BOT_CURRENCY не найдено")
 
-@dp.message(Command('subscribe'))
+@dp.message(or_f(Command('subscribe'), F.data.startswith('buy_subscribe')))
 async def command_start_handler(message: Message) -> None:
     await message.answer(
         text="Хотите оплатить подписку❓",
@@ -95,12 +95,10 @@ async def process_callback_query(callback_query: types.CallbackQuery) -> None:
             prices=prices
         )
 
-        
 @dp.pre_checkout_query()
 async def process_pre_checkout_query(pre_checkout_query: PreCheckoutQuery) -> None:
     await bot.answer_pre_checkout_query(pre_checkout_query.id, ok=True)
     
-
 @dp.message(F.successful_payment)
 async def process_successful_payment(message: Message, session: AsyncSession) -> None:
     payload_to_message = {

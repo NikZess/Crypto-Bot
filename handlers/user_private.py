@@ -1,9 +1,17 @@
+import os
+
 from aiogram import Router, types, F, Bot
 from aiogram.filters import CommandStart, Command, or_f
 
-
+from database.orm_query import orm_add_user
 from kbds.inline import MenuCallBack, get_user_prices_btns
 from utils.parsing_crypto import get_price
+
+from aiogram.types import (
+    LabeledPrice, 
+    PreCheckoutQuery, 
+    Message
+)
 
 from filters.chat_type import ChatTypeFilter
 
@@ -19,6 +27,15 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 user_private_router = Router()
 user_private_router.message.filter(ChatTypeFilter(["private"]))
+
+PROVIDER_TOKEN = os.getenv("PROVIDER_TOKEN")
+CURRENCY = os.getenv("BOT_CURRENCY")
+
+if not PROVIDER_TOKEN:
+    raise ValueError("BOT_CURRENCY не найдено")
+
+if not CURRENCY:
+    raise ValueError("BOT_CURRENCY не найдено")
 
 @user_private_router.message(CommandStart())
 async def start_cmd_handler(message: types.Message, session: AsyncSession):
@@ -65,4 +82,3 @@ async def get_price_usdt(callback_query: types.CallbackQuery) -> None:
     if result == "ton":
         price_crypto = get_price("TONUSDT")
         await callback_query.message.answer(f"Цена TON: {price_crypto}")
-
