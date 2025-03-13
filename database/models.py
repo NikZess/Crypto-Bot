@@ -13,3 +13,11 @@ class User(Base):
     first_name: Mapped[str] = mapped_column(String(150), nullable=True)
     last_name: Mapped[str]  = mapped_column(String(150), nullable=True)
     phone: Mapped[str]  = mapped_column(String(13), nullable=True)
+    
+
+class UserCurrency(Base):
+    __tablename__ = 'user_currency'
+    
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    user_id: Mapped[int] = mapped_column(BigInteger, unique=True)
+    currency: Mapped[str] = mapped_column(String(10), nullable=True)

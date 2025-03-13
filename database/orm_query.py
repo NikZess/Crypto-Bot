@@ -24,3 +24,9 @@ async def orm_add_user(
         return new_user
 
     return None 
+
+# async def orm_add_user_currency(
+#     session: AsyncSession,
+#     user_id: int,
+# ):
+#     query = sele
