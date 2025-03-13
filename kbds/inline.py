@@ -17,7 +17,10 @@ def get_purchase_keyboard() -> InlineKeyboardMarkup:
 def get_prices_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="BTC", callback_data="usdt_btc")],
-        [InlineKeyboardButton(text="TON", callback_data="usdt_ton")]
+        [InlineKeyboardButton(text="TON", callback_data="usdt_ton")],
+        [InlineKeyboardButton(text="ETH", callback_data="usdt_eth")],
+        [InlineKeyboardButton(text="XRP", callback_data="usdt_xrp")],
+        [InlineKeyboardButton(text="DOGE", callback_data="usdt_doge")],
     ])
     
 def get_user_main_btns(*, level: int, sizes: tuple[int] = (2, 1, 1)) -> InlineKeyboardMarkup:
@@ -35,13 +38,13 @@ def get_user_main_btns(*, level: int, sizes: tuple[int] = (2, 1, 1)) -> InlineKe
                     text=text, 
                     callback_data=MenuCallBack(level=1, menu_name=menu_name).pack()
                 ))
-            
+        
         elif menu_name == "about":
             keyboard.add(InlineKeyboardButton(
                     text=text,
                     callback_data=MenuCallBack(level=2, menu_name=menu_name).pack()
                 ))
-            
+        
         elif menu_name == "settings":
             keyboard.add(InlineKeyboardButton(
                     text=text,
@@ -57,6 +60,9 @@ def get_user_prices_btns(*, level: int, sizes: tuple[int] = (1,)) -> InlineKeybo
         "Назад 🔙": "back_menu_from_prices",
         "BTC": "usdt_btc",
         "TON": "usdt_ton",
+        "ETH": "usdt_eth",
+        "XRP": "usdt_xrp",
+        "DOGE": "usdt_doge",
     }
     
     for text, menu_name in btns.items():
@@ -65,7 +71,7 @@ def get_user_prices_btns(*, level: int, sizes: tuple[int] = (1,)) -> InlineKeybo
                 text=text,
                 callback_data=MenuCallBack(level=0, menu_name="main").pack()
             ))
-        elif menu_name in ["usdt_btc", "usdt_ton"]:
+        elif menu_name in ["usdt_btc", "usdt_ton", "usdt_eth", "usdt_xrp", "usdt_doge"]:
             keyboard.add(InlineKeyboardButton(
                 text=text,
                 callback_data=MenuCallBack(level=level, menu_name=menu_name).pack()
