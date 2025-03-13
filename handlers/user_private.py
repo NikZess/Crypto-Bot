@@ -5,7 +5,7 @@ from aiogram.filters import CommandStart, Command, or_f
 
 from kbds.inline import MenuCallBack
 
-from APIparsers.parsing_crypto import get_price
+from APIparsers.binanceAPI_parsing import get_price
 
 from filters.chat_type import ChatTypeFilter
 
@@ -58,7 +58,6 @@ async def crypto_cmd_handler(message: types.Message, session: AsyncSession):
 async def get_price_usdt(callback_query: types.CallbackQuery) -> None:
     data = callback_query.data
     result = data.split("_")[1]
-    print(result)
     
     if result == "btc":
         price_crypto = get_price("BTCUSDT")
@@ -67,3 +66,15 @@ async def get_price_usdt(callback_query: types.CallbackQuery) -> None:
     if result == "ton":
         price_crypto = get_price("TONUSDT")
         await callback_query.message.answer(f"Цена TON: {price_crypto}")
+        
+    if result == "eth":
+        price_crypto = get_price("ETHUSDT")
+        await callback_query.message.answer(f"Цена ETX: {price_crypto}")
+        
+    if result == "xrp":
+        price_crypto = get_price("XRPUSDT")
+        await callback_query.message.answer(f"Цена XRP: {price_crypto}")
+    
+    if result == "doge":
+        price_crypto = get_price("DOGEUSDT")
+        await callback_query.message.answer(f"Цена DOGE: {price_crypto}")
