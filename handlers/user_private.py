@@ -9,8 +9,8 @@ from APIparsers.binanceAPI_parsing import get_price
 
 from filters.chat_type import ChatTypeFilter
 
-from kbds.reply import get_keyboard, del_kb
 from kbds.inline import get_prices_keyboard
+from kbds.reply import del_kb
 
 from handlers.menu_processing import get_menu_content
 
@@ -57,24 +57,6 @@ async def crypto_cmd_handler(message: types.Message, session: AsyncSession):
 @user_private_router.callback_query(F.data.startswith("usdt"))
 async def get_price_usdt(callback_query: types.CallbackQuery) -> None:
     data = callback_query.data
-    result = data.split("_")[1]
+    currency = data.split("_")[1].upper()
     
-    if result == "btc":
-        price_crypto = get_price("BTCUSDT")
-        await callback_query.message.answer(f"Цена BTC: {price_crypto}")
-          
-    if result == "ton":
-        price_crypto = get_price("TONUSDT")
-        await callback_query.message.answer(f"Цена TON: {price_crypto}")
-        
-    if result == "eth":
-        price_crypto = get_price("ETHUSDT")
-        await callback_query.message.answer(f"Цена ETX: {price_crypto}")
-        
-    if result == "xrp":
-        price_crypto = get_price("XRPUSDT")
-        await callback_query.message.answer(f"Цена XRP: {price_crypto}")
-    
-    if result == "doge":
-        price_crypto = get_price("DOGEUSDT")
-        await callback_query.message.answer(f"Цена DOGE: {price_crypto}")
+    await callback_query.message.answer(f"Цена {currency} в USDT: {get_price(F"{currency}USDT")}")
