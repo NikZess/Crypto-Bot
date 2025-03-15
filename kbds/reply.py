@@ -1,7 +1,6 @@
 from aiogram.types import KeyboardButton, ReplyKeyboardRemove
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
-
 def get_keyboard(
     *btns: str,
     placeholder: str = None,
@@ -15,7 +14,6 @@ def get_keyboard(
         
         if request_contact and request_contact == index:
             keyboard.add(KeyboardButton(text=text, request_contact=True))
-
         elif request_location and request_location == index:
             keyboard.add(KeyboardButton(text=text, request_location=True))
         else:
