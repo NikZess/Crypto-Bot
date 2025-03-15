@@ -61,11 +61,9 @@ async def command_start_handler(message: Message) -> None:
 
 @dp.callback_query(F.data.startswith("buy"))
 async def process_callback_query(callback_query: types.CallbackQuery) -> None:
-    data = callback_query.data  
-    parts = data.split('_')  
+    data = callback_query.data.split('_')
 
-
-    action = parts[1]
+    action = data[1]
     print(action)
     
     prices = []
