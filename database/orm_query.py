@@ -26,17 +26,17 @@ async def orm_add_user(
     return None
 
 async def orm_get_user_currency(session: AsyncSession, user_id: int) -> str:
-    stmt = select(UserCurrency.currency).where(UserCurrency.user_id == user_id)
+    query = select(UserCurrency.currency).where(UserCurrency.user_id == user_id)
     
-    result = await session.execute(stmt)
+    result = await session.execute(query)
     currency = result.scalar()
     
     return currency if currency else "USDT"
 
 async def orm_set_user_currency(session: AsyncSession, user_id: int, currency: str):
-    stmt = select(UserCurrency).where(UserCurrency.user_id == user_id)
+    query = select(UserCurrency).where(UserCurrency.user_id == user_id)
     
-    result = await session.execute(stmt)
+    result = await session.execute(query)
     user_currency = result.scalar_one_or_none()
 
     if user_currency:
